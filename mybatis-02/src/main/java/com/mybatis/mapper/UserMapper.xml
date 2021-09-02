@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间，绑定一个对应的Dao(Mapper)接口-->
+<mapper namespace="com.mybatis.mapper.UserMapper">
+    <!--select查询语句，id事对应接口里面的方法名字
+    resultType=返回的类型，要指向pojo那个封装类的类型或者其他类型
+    resultMap=返回的集合
+    -->
+    <select id="getUserList" resultType="user">
+        select * from user
+    </select>
+
+
+    <!--根据id查询用户-->
+    <select id="getUserById" resultType="user" parameterType="int">
+        select * from user where id=#{id}
+    </select>
+
+
+    <!--添加数据，对象中的属性,可以直接取出来-->
+    <insert id="addUser" parameterType="com.mybatis.pojo.User" >
+        insert into user(id,name,pwd) value (#{id},#{name},#{pwd});
+    </insert>
+
+    <!--修改用户-->
+    <update id="updateUser" parameterType="com.mybatis.pojo.User">
+        update user
+        set name = #{name},pwd=#{pwd}
+        where id = #{id};
+    </update>
+
+    <!--删除一个用户-->
+    <delete id="deleteUser" parameterType="int">
+        delete from user where id=#{id};
+    </delete>
+</mapper>
+
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--引入外部配置文件-->
+    <properties resource="db.properties">
+    </properties>
+
+    <!--设置日志-->
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <!--下面是把数据库的经典字段名(带下划线)自动变成驼峰命名，与实体类(使用驼峰命名)一致-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--显式开启缓存-->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+    <!--可以给实体类型期别名-->
+    <typeAliases>
+        <!--        <typeAlias type="com.mybatis.pojo.User" alias="user"/>-->
+        <!--可以使用注解随便起别名，否则只能是pojo开头小写类名-->
+        <package name="com.mybatis.pojo"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/><!--事务管理-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--每一个Mapper.xml都需要在Mybatis核心配置文件中注册-->
+    <mappers>
+        <mapper resource="com/mybatis/dao/UserMapper.xml"></mapper>
+    </mappers>
+</configuration>

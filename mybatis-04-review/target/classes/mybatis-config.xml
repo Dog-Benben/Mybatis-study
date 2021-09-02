@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--引入外部配置文件-->
+    <properties resource="db.properties">
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </properties>
+
+    <!--设置日志-->
+    <settings>
+        <!-- 标准的日志工厂实现-->
+<!--         <setting name="logImpl" value="STDOUT_LOGGING"/>-->
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+    <!--可以给实体类型期别名-->
+    <typeAliases>
+<!--        <typeAlias type="com.mybatis.pojo.User" alias="user"/>-->
+        <!--可以使用注解随便起别名，否则只能是pojo开头小写类名-->
+        <package name="com.mybatis.pojo"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/><!--事务管理-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+        <environment id="test">
+            <transactionManager type=""></transactionManager>
+            <dataSource type=""></dataSource>
+        </environment>
+    </environments>
+
+    <!--每一个Mapper.xml都需要在Mybatis核心配置文件中注册-->
+    <mappers>
+<!--        <mapper resource="com/mybatis/mapper/UserMapper.xml"></mapper>-->
+<!--        <mapper class="com.mybatis.mapper.UserMapper"/>-->
+        <package name="com.mybatis.mapper"/>
+    </mappers>
+</configuration>

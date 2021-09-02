@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.dao.TeacherMapper">
+    <!--按结果嵌套查询-->
+    <select id="getTeacher" resultMap="getTeacherStudents">
+        select s.id sid ,t.name tname , s.name sname ,t.id tid
+        from student s,teacher t
+        where s.tid=t.id and t.id=#{tid}
+    </select>
+    <resultMap id="getTeacherStudents" type="teacher">
+        <result property="id" column="tid"/>
+        <result property="name" column="tname"/>
+        <!--复杂的属性，我们需要单独处理 对象：association ; 集合:collection
+            javaType=""：指定属性类型
+            集合中的泛型信息，我们使用ofType=""
+        -->
+        <collection property="students" ofType="student">
+            <result property="id" column="sid"/>
+            <result property="name" column="sname"/>
+            <result property="tid" column="tid"/>
+        </collection>
+    </resultMap>
+
+    <!--  ==============================按照子查询嵌套查询===================================  -->
+    <select id="getTeacher2" resultMap="getTeacherStudents2">
+        select * from teacher where id =#{tid}
+    </select>
+
+    <resultMap id="getTeacherStudents2" type="teacher">
+        <collection property="students" javaType="ArrayList" ofType="student" select="getStudentById" column="id"/>
+    </resultMap>
+    <select id="getStudentById" resultType="student">
+        select * from student where tid = #{tid}
+    </select>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.StudentMapper">
+
+
+    <!--按照结果嵌套处理-->
+    <select id="getStudent2" resultMap="getStudentTeacher2">
+        select s.id sid,s.name sname,t.name tname from student s,teacher t
+        where s.tid=t.id
+    </select>
+    <!--使用结果集合-->
+    <resultMap id="getStudentTeacher2" type="student">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="teacher" javaType="teacher">
+            <result property="name" column="tname"/>
+        </association>
+    </resultMap>
+
+
+<!--    ================================-->
+    <!--
+        思路：
+        1.查询所有的学生信息
+        2.根据查询出来的学生的tid，寻找对应的老师！
+    -->
+    <select id="getStudent" resultMap="studentTeacher">
+        select * from student
+    </select>
+    <resultMap id="studentTeacher" type="student">
+        <result property="id" column="id"/><!--这是映射数据库名字和实体类名字-->
+        <result property="name" column="name"/>
+        <!--复杂的属性需要单独处理
+            对象：association
+            集合：collection
+        -->
+        <!--要为下面的语句要赋值一个类型为Teacher：javaType="teacher"
+        嵌套查询：select="getTeacher"
+        -->
+        <association property="teacher" column="tid" javaType="teacher" select="getTeacher"/>
+    </resultMap>
+
+    <select id="getTeacher" resultType="teacher">
+        select * from teacher where id=#{tid}
+    </select>
+
+</mapper>
